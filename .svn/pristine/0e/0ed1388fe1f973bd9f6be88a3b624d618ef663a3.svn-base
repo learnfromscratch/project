@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Repositories;
+
+use App\KeywordGroup;
+
+/**
+* 
+*/
+class KeywordGroups
+{
+	
+	function __construct()
+	{
+		# code...
+	}
+
+	public function all()
+	{
+		return KeywordGroup::all();
+	}
+
+	/**
+	 * @param int $id
+	 * @return KeywordGroup
+	*/
+	public function findId($id)
+	{
+		return KeywordGroup::find($id);
+	}
+
+	/**
+	 * @param string $name
+	 * @return KeywordGroup
+	*/
+	public function findName($name)
+	{
+		return KeywordGroup::where('name', $name)->first();
+	}
+
+}

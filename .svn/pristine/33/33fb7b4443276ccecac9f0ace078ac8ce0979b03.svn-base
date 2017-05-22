@@ -1,0 +1,84 @@
+<?php $__env->startSection('css'); ?>
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+    <div class="container">
+        <div class="row col-lg-12">
+            <form class="search-form" role="search" action="<?php echo e(route('search')); ?>" method="post">
+                <?php echo e(csrf_field()); ?>
+
+                <div class="input-group">
+                    <input type="text" name="data" id="data" placeholder="Recherche" class="form-control input-lg" ng-model="name">
+                    <a href="" class="input-group-addon w3-blue"><i class="fa fa-search fa-fw" aria-hidden="true"></i></a>
+                </div>
+            </form>
+        </div>
+
+        <div class="row col-lg-12">
+            <hr class="w3-blue w3-text-blue" />
+        </div>
+
+        <div class="row col-lg-12 w3-padding-4 w3-margin-bottom w3-blue">
+            <h3>Tous les articles</h3>
+        </div>
+        <div class="row w3-margin-bottom">
+            <h5>Nombres d'articles : <i><?php echo e($resultset->getNumFound()); ?> </i></h5>
+        </div>
+
+        <?php  $path = ""  ?>
+
+        <?php $__currentLoopData = $resultset; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $document): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php $__currentLoopData = $document; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $field => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+                <?php if(is_array($value)): ?>
+                    <?php  $value = implode(', ', $value)  ?>
+                <?php endif; ?>
+
+                <?php if($field == "KeywordGroup"): ?>
+                <?php  $path= $value."/";
+                 ?>
+                <?php endif; ?>
+
+                <?php if($field == 'Title'): ?>
+                    <?php  $title = $value  ?>
+                <?php endif; ?>
+
+                <?php if($field == 'Fulltext'): ?>
+                    <?php  $fulltext = $value  ?>
+                <?php endif; ?>
+
+                <?php if($field == 'Source'): ?>
+                    <?php  $source = $value  ?>
+                <?php endif; ?>
+
+                <?php if($field == 'SourceDate'): ?>
+                    <?php  $sourceDate = $value  ?>
+                <?php endif; ?>
+
+                <?php if($field == 'document'): ?>
+                    <?php  $pdf = $folderPdfs.'/'.$path.$value  ?>
+                <?php endif; ?>
+
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                
+                <div class="row w3-margin-bottom">
+                    <div class="media">
+                      <div class="media-left">
+                        <img src="img_avatar1.png" class="media-object" style="width:90px">
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading w3-xlarge"><?php echo e($title); ?></h4>
+                        <p><?php echo e($fulltext); ?></p>
+                        <i>Source : <?php echo e($source); ?></i><br>
+                        <i>Publié le <?php echo e($sourceDate); ?></i>
+                        <a href="<?php echo e($pdf); ?>" target="_blank" class="w3-btn pull-right w3-green">Voir le pdf</a>
+                      </div>
+                    </div>
+                </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

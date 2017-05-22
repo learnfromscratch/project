@@ -1,0 +1,19 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class KeywordsTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('keywords')->insert(['name' => 'all']);
+        DB::table('keywords')->insert(['name' => 'bleach']);
+        DB::table('keywords')->insert(['name' => 'naruto']);
+        DB::table('keywords')->insert(['name' => 'onepiece']);
+    }
+}

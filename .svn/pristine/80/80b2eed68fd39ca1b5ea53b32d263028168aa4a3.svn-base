@@ -1,0 +1,7 @@
+<?php $__env->startSection('page'); ?>
+	<div class="w3-center">
+		<a href="<?php echo e(route('indexingCustomer')); ?>" class="w3-btn w3-red">Indexer les articles Customers</a>
+		<a href="<?php echo e(route('indexingArticle')); ?>" class="w3-btn w3-blue">Indexer les articles</a>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,51 @@
+<?php $__env->startSection('content'); ?>
+	<div class="container">
+        <div class="row">
+            <form class="search-form" role="search" action="<?php echo e(route('search')); ?>" method="post">
+                <?php echo e(csrf_field()); ?>
+
+                <div class="input-group waves-light col-lg-6 col-lg-offset-6">
+                    <input type="text" name="data" id="data" placeholder="Recherche" class="form-control input-lg">
+                    <a href="" class="input-group-addon w3-blue"><i class="fa fa-search fa-fw" aria-hidden="true"></i></a>
+                </div>
+            </form>
+        </div>
+
+        <div class="row w3-padding-32">
+
+            <div class="side-nav col-sm-3 w3-border w3-round w3-border-light-gray">
+                <h5 class="w3-padding-16 w3-center">Catégories</h5>
+                <ul class="list-unstyled side-nav fixed custom-scrollbar w3-margin">
+                    <li>
+                        <i class="fa fa-chevron-right w3-margin-right" aria-hidden="true"></i>
+                        <a href="<?php echo e(route('home')); ?>">Tous <span class="badge w3-blue">17</span></a>
+                    </li>
+                    <li>
+                        <i class="fa fa-chevron-right w3-margin-right" aria-hidden="true"></i>
+                        <a href="">Plus pertinants</a>
+                    </li>
+                    <li>
+                        <i class="fa fa-chevron-right w3-margin-right" aria-hidden="true"></i>
+                        <a href="">Enregistrés</a>
+                    </li>
+                    <li>
+                        <i class="fa fa-chevron-right w3-margin-right" aria-hidden="true"></i>
+                        <a href="" class="collapsible-header waves-effect arrow-r">Sources <i class="fa fa-angle-down rotate-icon"></i></a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="#" class="waves-effect">Source 1</a>
+                                </li>
+                                <li><a href="#" class="waves-effect">Source 2</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <?php echo $__env->yieldContent('content'); ?>
+
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

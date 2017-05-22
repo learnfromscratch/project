@@ -1,0 +1,65 @@
+<?php $__env->startSection('title'); ?>
+	Gestion des clients
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+	<div class="col-md-12">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Liste des clients</h3><br>
+				<div class="row">
+					<a href="<?php echo e(route('addUsers')); ?>" class="btn btn-success btn-toastr"><i class="fa fa-plus fa-fw"></i> Ajouter un client</a>
+					<form class="pull-right">
+						<div class="input-group">
+							<input type="text" value="" class="form-control" placeholder="Chercher client...">
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th></th>
+							<th>#</th>
+							<th>CIN</th>
+							<th>Nom</th>
+							<th>Keywords</th>
+							<th>E-Mail</th>
+							<th>Fin abonnement</th>
+							<th>Téléphone</th>
+							<th>Adresse</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+							<?php 
+								$userKeyword = App\UserKeyword::where('user_id', $user->id)->first()->keyword_id;
+								$keywords = App\Keyword::where('id', $userKeyword)->first()->name;
+								$abonnement = App\Abonnement::where('user_id', $user->id)->first()->end_at;
+							 ?>
+							<tr>
+								<td><input type="checkbox" name="users"></td>
+								<td><?php echo e($user->id); ?></td>
+								<td><?php echo e($user->cin); ?></td>
+								<td><?php echo e($user->name); ?></td>
+								<td><?php echo e($keywords); ?></td>
+								<td><?php echo e($user->email); ?></td>
+								<td><?php echo e($abonnement); ?></td>
+								<td><?php echo e($user->tel); ?></td>
+								<td><?php echo e($user->address); ?></td>
+								<td>
+									<i class="lnr lnr-trash fa-fw" title="Supprimer"></i>
+									<i class="lnr lnr-pencil fa-fw" title="Modifier"></i>
+								</td>
+							</tr>
+						<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+					</tbody>
+				</table>
+				<div class="pull-right"><?php echo e($users->links()); ?></div>
+			</div>
+		</div>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

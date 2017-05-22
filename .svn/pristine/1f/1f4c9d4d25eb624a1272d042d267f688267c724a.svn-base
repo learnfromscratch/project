@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\Solarium;
+
+class HomeController extends Controller
+{
+    protected $client;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+   /* public function test()
+    {
+        $keywordGroup = KeywordGroup::first();
+        Auth::user()->notify(new Newsletter ($keywordGroup));
+    }*/
+
+    /**
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request, \Solarium\Client $client)
+    {
+        $user_id = Auth::user()->id;
+
+        $folderPdfs = "dossier/ExportCustomers";
+
+        $resultset = (new Solarium($client))->index($request, $user_id);
+
+        return view('home', compact('resultset', 'folderPdfs'));
+    }
+
+}

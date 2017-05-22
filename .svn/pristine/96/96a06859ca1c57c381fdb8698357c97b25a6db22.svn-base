@@ -1,0 +1,132 @@
+<?php $__env->startSection('title'); ?>
+	Tableau de bord
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+	<!-- Calcul des articles non indexé -->
+	<?php 
+		$dir = 'dossier/ExportCustomers';
+		$directory = array_diff(scandir($dir), array('..', '.DS_Store', '.'));
+		$date = file_get_contents("dossier/time.txt");
+		$j = 0;
+		foreach ($directory as $files1) {
+			$path = $dir.'/'.$files1;
+			$dir1 = array_diff(scandir($path), array('..', '.'));
+			
+			foreach ($dir1 as $file) {
+				$base = basename($file, ".xml");
+				$newtime = filectime($path."/".$file);
+				if (strtolower(substr($file, strrpos($file, '.') + 1)) == 'xml' 
+				&& $base != $files1 && $newtime > $date ) 
+				{
+					$j++;
+				}
+			}	
+		}
+	 ?>
+
+
+	<!-- VUE D'ENSEMBLE -->
+	<div class="panel panel-headline">
+		<div class="panel-heading">
+			<h3 class="panel-title">Aperçu hebdomadaire</h3>
+
+			<?php 
+				$monday = new Carbon\Carbon('last monday');
+			 ?>
+			<p class="panel-subtitle">Période: <?php echo e($monday->toFormattedDateString()); ?> - <?php echo e(Carbon\Carbon::now()->toFormattedDateString()); ?></p>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="metric">
+						<span class="icon"><i class="fa fa-user"></i></span>
+						<p>
+							<span class="number"><?php echo e(sizeof(App\User::all())); ?></span>
+							<span class="title">Utilisateurs</span>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="metric">
+						<span class="icon"><i class="fa fa-file-text"></i></span>
+						<p>
+							<span class="number"><?php echo e($j); ?></span>
+							<span class="title">Articles non indexés</span>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="metric">
+						<span class="icon"><i class="fa fa-eye"></i></span>
+						<p>
+							<span class="number">0</span>
+							<span class="title">Visites</span>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="metric">
+						<span class="icon"><i class="fa fa-dowload"></i></span>
+						<p>
+							<span class="number">0</span>
+							<span class="title">PDF téléchargés</span>
+						</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- FIN VUE D'ENSEMBLE -->
+
+	<div class="row">
+		<div class="col-md-7">
+			<!-- TODO LIST -->
+			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Liste de choses à faire</h3>
+					<div class="right">
+						<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+						<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+					</div>
+				</div>
+				<div class="panel-body">
+					<ul class="list-unstyled todo-list">
+						<li>
+							<label class="control-inline fancy-checkbox">
+								<input type="checkbox"><span></span>
+							</label>
+							<p>
+								<span class="title">Indexation</span>
+								<span class="short-description">Indexer les articles qui viennent d'être ajouté.</span>
+								<span class="date">Oct 9, 2016</span>
+							</p>
+							<div class="controls">
+								<a href="#"><i class="icon-software icon-software-pencil"></i></a> <a href="#"><i class="icon-arrows icon-arrows-circle-remove"></i></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- END TODO LIST -->
+		</div>
+		<div class="col-md-5">
+			<!-- TIMELINE -->
+			<div class="panel panel-scrolling">
+				<div class="panel-heading">
+					<h3 class="panel-title">Actions</h3>
+					<div class="right">
+						<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+						<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+					</div>
+				</div>
+				<div class="panel-body">
+					<a href="<?php echo e(route('indexingCustomer')); ?>" type="button" class="btn btn-primary btn-right center-block">Indexer les articles</a> <br>
+				</div>
+			</div>
+			<!-- END TIMELINE -->
+		</div>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

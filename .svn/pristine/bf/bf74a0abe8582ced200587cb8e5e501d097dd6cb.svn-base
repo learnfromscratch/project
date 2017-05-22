@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Abonnement;
+
+/**
+* 
+*/
+class Abonnements
+{
+	
+	function __construct()
+	{
+		# code...
+	}
+
+	public function all()
+	{
+		return Abonnement::all();
+	}
+
+	/**
+	 * @param int $user_id
+	 * @return Abonnement
+	*/
+	public function findUser($user_id)
+	{
+		return Abonnement::where('user_id', $user_id)->first();
+	}
+	
+}

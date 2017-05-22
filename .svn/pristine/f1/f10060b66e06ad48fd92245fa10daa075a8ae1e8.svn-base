@@ -1,0 +1,180 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\User;
+use App\UserKeyword;
+use App\Keyword;
+use App\Notification;
+
+class AdminController extends Controller
+{
+    protected $client;
+
+    public function __construct()
+    {
+    	$this->middleware('admin');
+    }
+
+    public function index()
+    {
+    	return view('admin.dashboard');
+    }
+
+    public function showUsers()
+    {
+        $users = User::paginate('10');
+        $userKeywords = UserKeyword::where('user_id', $user->id)->first()->keyword_id;
+        $keywords = Keyword::where('id', $userKeyword)->first()->name;
+
+        return view('admin.users', compact('users', $userKeywords));
+    }
+
+    public function addUsers()
+    {
+        return view('admin.addUsers');
+    }
+
+    /*public function indexingCustomer(\Solarium\Client $client)
+    {
+        $this->client = $client;
+        
+        $dir = 'dossier/ExportCustomers';
+        $directory = array_diff(scandir($dir), array('..', '.DS_Store', '.'));
+
+        // Ajout des keywordGroup dans la base
+        foreach ($directory as $keywordGroup) {
+            KeywordGroup::firstOrCreate(['name' => $keywordGroup]);
+        }
+
+        $buffer = $this->client->getPlugin('bufferedadd');
+        $buffer->setBufferSize(1000); // this is quite low, in most cases you can use a much higher value
+        $doc1 = [];
+        $filetime = "dossier/time.txt";
+
+        $date = file_get_contents($filetime);
+        $j=0;
+        $storedTime = 0;
+        foreach ($directory as $files1) {
+            $path = $dir.'/'.$files1;
+            $dir1 = array_diff(scandir($path), array('..', '.DS_Store', '.'));
+            foreach ($dir1 as $file) {
+                $base = basename($file, ".xml");
+
+                $newtime = filectime($path."/".$file);
+                if ($newtime > $storedTime)
+                    $storedTime = $newtime;
+
+                if (strtolower(substr($file, strrpos($file, '.') + 1)) == 'xml' 
+                    && $base != $files1 
+                    && $newtime > $date ) 
+                    {
+                    
+                    $xml=simplexml_load_file($path."/".$file) or die("Error: Cannot create object");
+
+                    $j++;
+                    $i = 0;
+                    foreach($xml->Record->Field as $keys => $value) {
+                        $key = (string) $xml->Record->Field[$i]['name'];
+                        $value = (string) $xml->Record->Field[$i];
+                        if ($key == 'RevDate' || $key == 'SourceDate') {
+                            $time = strtotime($value);
+                            $newformat = date('Y-m-d',$time);
+                            $value =  $newformat;
+                        }
+                      
+                        $doc1[$key] = $value;
+                        $i++;
+                    }
+                    //$unique = (string) $xml->Record->Field[8];
+                    $doc1['id'] = $file."-".$files1;
+                    $doc1["document"] = (string) $xml->Record->Document['name'];
+                    //print_r($doc1);
+                    $buffer->createDocument($doc1);
+                }
+            }   
+        }
+        file_put_contents($filetime, $storedTime);
+        $buffer->commit();
+
+        Notification::create(['name' => 'Indexation réussi',
+            'type' => 'success',]);
+
+        return redirect()->route('dashboard');
+    }
+    
+    public function indexingArticle()
+    {
+
+        $config1 = [
+            'endpoint' => [
+                'localhost' => [
+                    'host' => env('SOLR_HOST', '127.0.0.1'),
+                    'port' => env('SOLR_PORT', '8983'),
+                    'path' => env('SOLR_PATH', '/solr/'),
+                    'core' => env('SOLR_CORE', 'app1')
+                ]
+            ]
+        ];
+
+        $this->client = new \Solarium\Client($config1);
+
+
+        $dir = 'dossier/ExportArticles';
+        $directory = array_diff(scandir($dir), array('..', '.DS_Store', '.'));
+
+        $buffer = $this->client->getPlugin('bufferedadd');
+        $buffer->setBufferSize(1000); // this is quite low, in most cases you can use a much higher value
+        $doc1 = [];
+        $filetime = "dossier/time1.txt";
+
+        $date = file_get_contents($filetime);
+        $j=0;
+        $storedTime = 0;
+        foreach ($directory as $file) {
+            $path = $dir.'/'.$file;
+            //$dir1 = array_diff(scandir($path), array('..', '.'));
+            //foreach ($dir1 as $file) {
+                $base = basename($file, ".xml");
+
+                $newtime = filectime($path);
+                if ($newtime > $storedTime)
+                    $storedTime = $newtime;
+
+                if (strtolower(substr($file, strrpos($file, '.') + 1)) == 'xml' 
+                    && $base != $file 
+                    && $newtime > $date ) 
+                    {
+                    
+                    $xml=simplexml_load_file($path) or die("Error: Cannot create object");
+
+                    $j++;
+                    $i = 0;
+                    foreach($xml->Record->Field as $keys => $value) {
+                        $key = (string) $xml->Record->Field[$i]['name'];
+                        $value = (string) $xml->Record->Field[$i];
+                        if ($key == 'RevDate' || $key == 'SourceDate') {
+                            $time = strtotime($value);
+                            $newformat = date('Y-m-d',$time);
+                            $value =  $newformat;
+                        }
+                      
+                        $doc1[$key] = $value;
+                        $i++;
+                    }
+                    //$unique = (string) $xml->Record->Field[8];
+                    $doc1['id'] = $file;
+                    $doc1["document"] = (string) $xml->Record->Document['name'];
+                    //print_r($doc1);
+                    $buffer->createDocument($doc1);
+                }
+            //} 
+        }
+        file_put_contents($filetime, $storedTime);
+        $buffer->commit();
+
+        return redirect()->route('dashboard');
+    } */
+
+}

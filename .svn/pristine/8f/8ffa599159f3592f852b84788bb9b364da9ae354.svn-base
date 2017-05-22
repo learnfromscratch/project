@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Repositories;
+
+use App\UserKeyword;
+
+/**
+* 
+*/
+class UserKeywords
+{
+	
+	function __construct()
+	{
+		# code...
+	}
+
+	public function all()
+	{
+		return UserKeyword::all();
+	}
+
+	/**
+	 * @param int $user_id
+	 * @param int $keyword_id
+	 * @return UserKeyword
+	*/
+	public function getKeyword($user_id)
+	{
+		return UserKeyword::where('user_id', $user_id)->value('keyword_id');
+	}
+
+	/**
+	 * @param int $user_id
+	 * @return UserKeyword
+	*/
+	public function getUser($keyword_id)
+	{
+		return UserKeyword::where('keyword_id', $keyword_id)->value('user_id');
+	}
+
+}

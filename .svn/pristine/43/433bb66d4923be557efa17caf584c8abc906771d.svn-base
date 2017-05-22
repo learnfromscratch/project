@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Repositories;
+
+use App\User;
+
+/**
+* 
+*/
+class Users
+{
+	
+	function __construct()
+	{
+		# code...
+	}
+
+	public function all()
+	{
+		return User::all();
+	}
+
+	/**
+	 * @param int $id
+	 * @return User
+	*/
+	public function find($id)
+	{
+		return User::find($id);
+	}
+
+	/**
+	* @param $id
+	* @return int
+	*/
+	public function delete($id)
+	{
+		return User::where('id', $id)->delete();
+	}
+	
+}

@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Notification;
+
+/**
+* 
+*/
+class Notifications
+{
+	
+	function __construct()
+	{
+		# code...
+	}
+
+	public function all()
+	{
+		return Notification::all();
+	}
+
+	/**
+	 * @param int $id
+	 * @return Notification
+	*/
+	public function find($id)
+	{
+		return Notification::find($id);
+	}
+
+}

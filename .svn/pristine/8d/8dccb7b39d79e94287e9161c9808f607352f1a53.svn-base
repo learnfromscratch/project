@@ -1,0 +1,65 @@
+@extends ('admin.template')
+
+@section('title')
+	Gestion des clients
+@endsection
+
+@section('content')
+	<div class="col-md-12">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Liste des clients</h3><br>
+				<div class="row">
+					<a href="{{ route('addUsers') }}" class="btn btn-success btn-toastr"><i class="fa fa-plus fa-fw"></i> Ajouter un client</a>
+					<form class="pull-right">
+						<div class="input-group">
+							<input type="text" value="" class="form-control" placeholder="Chercher client...">
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th></th>
+							<th>#</th>
+							<th>CIN</th>
+							<th>Nom</th>
+							<th>Keywords</th>
+							<th>E-Mail</th>
+							<th>Fin abonnement</th>
+							<th>Téléphone</th>
+							<th>Adresse</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach ($users as $user)
+							@php								
+								
+								$abonnement = App\Abonnement::where('user_id', $user->id)->first()->end_at;
+							@endphp
+							<tr>
+								<td><input type="checkbox" name="users"></td>
+								<td>{{ $user->id }}</td>
+								<td>{{ $user->cin }}</td>
+								<td>{{ $user->name }}</td>
+								<td>{{ $keywords }}</td>
+								<td>{{ $user->email }}</td>
+								<td>{{ $abonnement }}</td>
+								<td>{{ $user->tel }}</td>
+								<td>{{ $user->address }}</td>
+								<td>
+									<i class="lnr lnr-trash fa-fw" title="Supprimer"></i>
+									<i class="lnr lnr-pencil fa-fw" title="Modifier"></i>
+								</td>
+							</tr>
+						@endforeach
+					</tbody>
+				</table>
+				<div class="pull-right">{{ $users->links() }}</div>
+			</div>
+		</div>
+	</div>
+@endsection

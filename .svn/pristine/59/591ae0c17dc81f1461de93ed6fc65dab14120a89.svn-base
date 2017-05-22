@@ -1,0 +1,83 @@
+@extends('layouts.app')
+
+@section('css')
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+@endsection
+
+@section('content')
+    <div class="container">
+        <div class="row col-lg-12">
+            <form class="search-form" role="search" action="{{ route('search') }}" method="post">
+                {{ csrf_field() }}
+                <div class="input-group">
+                    <input type="text" name="data" id="data" placeholder="Recherche" class="form-control input-lg" ng-model="name">
+                    <a href="" class="input-group-addon w3-blue"><i class="fa fa-search fa-fw" aria-hidden="true"></i></a>
+                </div>
+            </form>
+        </div>
+
+        <div class="row col-lg-12">
+            <hr class="w3-blue w3-text-blue" />
+        </div>
+
+        <div class="row col-lg-12 w3-padding-4 w3-margin-bottom w3-blue">
+            <h3>Tous les articles</h3>
+        </div>
+        <div class="row w3-margin-bottom">
+            <h5>Nombres d'articles : <i>{{ $resultset->getNumFound() }} </i></h5>
+        </div>
+
+        @php $path = "" @endphp
+
+        @foreach ($resultset as $document)
+            @foreach ($document as $field => $value)
+
+                @if (is_array($value))
+                    @php $value = implode(', ', $value) @endphp
+                @endif
+
+                @if ($field == "KeywordGroup")
+                @php $path= $value."/";
+                @endphp
+                @endif
+
+                @if ($field == 'Title')
+                    @php $title = $value @endphp
+                @endif
+
+                @if ($field == 'Fulltext')
+                    @php $fulltext = $value @endphp
+                @endif
+
+                @if ($field == 'Source')
+                    @php $source = $value @endphp
+                @endif
+
+                @if ($field == 'SourceDate')
+                    @php $sourceDate = $value @endphp
+                @endif
+
+                @if ($field == 'document')
+                    @php $pdf = $folderPdfs.'/'.$path.$value @endphp
+                @endif
+
+            @endforeach
+                
+                <div class="row w3-margin-bottom">
+                    <div class="media">
+                      <div class="media-left">
+                        <img src="img_avatar1.png" class="media-object" style="width:90px">
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading w3-xlarge">{{ $title }}</h4>
+                        <p>{{ $fulltext }}</p>
+                        <i>Source : {{ $source }}</i><br>
+                        <i>Publié le {{ $sourceDate }}</i>
+                        <a href="{{ $pdf }}" target="_blank" class="w3-btn pull-right w3-green">Voir le pdf</a>
+                      </div>
+                    </div>
+                </div>
+        @endforeach
+
+    </div>
+@endsection

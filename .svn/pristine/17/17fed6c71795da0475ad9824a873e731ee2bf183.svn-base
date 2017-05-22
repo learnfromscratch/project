@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Repositories\UserKeywords;
+use App\Repositories\KeywordGroups;
+
+/**
+* 
+*/
+class Solarium
+{
+	protected $client;
+	
+	function __construct($client)
+	{
+		$this->client = $client;
+	}
+
+	/**
+	 * @param \Illuminate\Http\Request $request
+	 * @param int $user_id
+	 * @return array $resultset
+	*/
+	public function index($request, $user_id)
+	{
+		$keyword_id = (new UserKeywords)->getKeyword($user_id);
+
+        if ($keyword_id != 1)
+        {
+            $name = (new KeywordGroup)->find($keyword_id)->name;
+            $querySearched = 'KeywordGroup:("'.$name.'")';
+        }
+
+        // get a select query instance
+        $query = $this->client->createSelect();
+        $query->setFields(['KeywordGroup','Title', 'Fulltext', 'document', 'Source', 'SourceDate']);
+
+        // get the dismax component and set a boost query
+        $edismax = $query->getEDisMax();
+        $query->setRows(20);
+        if (!empty($request->data)) {
+            $query->setQuery($request->data);
+        }
+
+        if (! empty($querySearched))
+        {
+            $query->createFilterQuery('KeywordGroup')->setQuery($querySearched);
+        }
+        // this executes the query and returns the result
+        return $resultset = $this->client->select($query);
+	}
+
+}
